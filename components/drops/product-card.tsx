@@ -53,7 +53,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <div className="mt-6">
             <BuyViaDMButton
               product={{
-                id: product.id,
+                
                 name: product.name,
                 size: product.size,
                 price: product.price,

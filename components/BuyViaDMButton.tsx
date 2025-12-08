@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import { STORE } from "@/lib/store"
 
 interface BuyViaDMButtonProps {
@@ -12,38 +11,28 @@ interface BuyViaDMButtonProps {
 }
 
 export default function BuyViaDMButton({ product }: BuyViaDMButtonProps) {
-  const message = `Hi! I want to buy:
-${product.name}
-Size: ${product.size}
-Price: ₹${product.price}`
+  const message = `Hi! I want to buy:\n${product.name}\nSize: ${product.size}\nPrice: ₹${product.price}`
 
-  // 1) Open DM compose screen with the store’s username
-  const dmLink = `https://www.instagram.com/direct/new/?username=${STORE.instagramUsername}`
-
-  const handleClick = async (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-  ) => {
-    // 2) Try to copy the prefilled message so user can paste it in DM
+  const handleClick = async () => {
     try {
-      if (navigator && navigator.clipboard) {
-        await navigator.clipboard.writeText(message)
-        console.log("Message copied to clipboard")
-      }
-    } catch (err) {
-      console.error("Failed to copy message to clipboard", err)
-      // not critical – link will still open
+      await navigator.clipboard.writeText(message)
+      alert("Message copied. Paste it in Instagram DM ✨")
+    } catch {
+      alert("Copy failed. Please type message manually.")
     }
+
+    window.open(
+      `https://ig.me/m/${STORE.instagramUsername}`,
+      "_blank"
+    )
   }
 
   return (
-    <a
-      href={dmLink}
-      target="_blank"
-      rel="noopener noreferrer"
+    <button
       onClick={handleClick}
       className="inline-flex w-full items-center justify-center rounded-full bg-stone-100 px-6 py-2 text-xs font-medium tracking-[0.25em] text-black uppercase hover:bg-stone-200 transition"
     >
       Buy via Instagram DM
-    </a>
+    </button>
   )
 }
