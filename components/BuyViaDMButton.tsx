@@ -14,17 +14,24 @@ export default function BuyViaDMButton({ product }: BuyViaDMButtonProps) {
   const message = `Hi! I want to buy:\n${product.name}\nSize: ${product.size}\nPrice: ₹${product.price}`
 
   const handleClick = async () => {
+    // ✅ Copy message first
     try {
       await navigator.clipboard.writeText(message)
       alert("Message copied. Paste it in Instagram DM ✨")
     } catch {
-      alert("Copy failed. Please type message manually.")
+      // silent fail
     }
 
-    window.open(
-      `https://ig.me/m/${STORE.instagramUsername}`,
-      "_blank"
-    )
+    const igAppLink = `instagram://user?username=${STORE.instagramUsername}`
+    const igWebLink = `https://instagram.com/${STORE.instagramUsername}`
+
+    // ✅ Try opening app
+    window.location.href = igAppLink
+
+    // ✅ Fallback to web after 1s
+    setTimeout(() => {
+      window.location.href = igWebLink
+    }, 1000)
   }
 
   return (
