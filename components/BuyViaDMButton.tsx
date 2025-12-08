@@ -1,68 +1,37 @@
 "use client"
 
-import { useState } from "react"
+import { STORE } from "@/lib/store"
 
-interface Product {
-  id: string
-  name: string
-  size: string
-  price: number
+interface BuyViaDMButtonProps {
+  product: {
+    id: string
+    name: string
+    size: string
+    price: number
+  }
 }
 
-export default function BuyViaDMButton({ product }: { product: Product }) {
-  const [copied, setCopied] = useState(false)
+export default function BuyViaDMButton({ product }: BuyViaDMButtonProps) {
+  const message = `Hi! I want to buy:
+${product.name}
+Size: ${product.size}
+Price: ₹${product.price}`
 
-  const handleClick = async () => {
-    if (copied) return
+  const dmLink = `https://ig.me/m/${STORE.instagramUsername}?text=${encodeURIComponent(
+    message
+  )}`
 
-    const message = `Hi Vintage Winn ✨
-
-I'm interested in buying:
-
-🖤 Item: ${product.name}
-📏 Size: ${product.size}
-💰 Price: ₹${product.price}
-🆔 Product ID: ${product.id}
-
-Is this still available?`
-
-    try {
-      await navigator.clipboard.writeText(message)
-      setCopied(true)
-    } catch {
-      // silently fail; still continue to Instagram
-    }
-
-    const profileUrl = "https://www.instagram.com/vinta.gewin/"
-    const appUrl = "instagram://user?username=vinta.gewin"
-
-    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)
-
-    if (isMobile) {
-      window.location.href = appUrl
-      setTimeout(() => {
-        window.location.href = profileUrl
-      }, 800)
-    } else {
-      window.open(profileUrl, "_blank")
-    }
-
-    setTimeout(() => {
-      setCopied(false)
-    }, 2000)
-  }
+  // Always go directly to DM with pre-filled message
+  const href = dmLink
 
   return (
-    <button
-      onClick={handleClick}
-      className={`mt-4 w-full rounded-md py-2 text-sm font-medium transition
-        ${
-          copied
-            ? "bg-green-600 text-white cursor-default"
-            : "bg-[#9e6b55] text-black hover:bg-[#b07a63]"
-        }`}
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex w-full items-center justify-center rounded-full bg-stone-100 px-6 py-2 text-xs font-medium tracking-[0.25em] text-black uppercase hover:bg-stone-200 transition"
     >
-      {copied ? "Message copied ✓" : "Buy via Instagram DM"}
-    </button>
+      Buy via Instagram DM
+    </a>
   )
 }

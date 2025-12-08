@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { HowToBuy } from '@/components/layout/how-to-buy'
 
 export default function Page() {
   return (
@@ -69,6 +70,9 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      {/* How to Buy */}
+      <HowToBuy instagramHandle="vinta.gewin" />
     </main>
   )
 }
